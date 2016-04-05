@@ -5,6 +5,7 @@ var HelloWorldLayer = cc.Layer.extend({
     pelota:null,    
     puntuacion1:null,
     puntuacion2:null,
+    
     inicializar:function(){
         var size = cc.winSize;
         var color = cc.color(100,100,100);
@@ -35,10 +36,45 @@ var HelloWorldLayer = cc.Layer.extend({
         this.addChild(this.puntuacion2,0);
         
     },
+    
+    // mover los pads
+    
+     movePads: function(keyCode, event){
+        
+        var target = event.getCurrentTarget();
+
+            
+        if(keyCode == cc.KEY.w){
+                target.jugador1.setPositionY(target.jugador1.getPositionY()+ 40)
+                
+        }
+         
+         if(keyCode == cc.KEY.s){
+                target.jugador1.setPositionY(target.jugador1.getPositionY()- 40)
+         }
+        if(keyCode == cc.KEY.up){
+                target.jugador2.setPositionY(target.jugador2.getPositionY()+ 40)
+        }
+         
+         if(keyCode == cc.KEY.down){
+                target.jugador2.setPositionY(target.jugador2.getPositionY()- 40)
+         }
+         
+        },
+
     ctor:function () {
         this._super();
         this.inicializar();
 
+        
+        
+
+        cc.eventManager.addListener({
+			event: cc.EventListener.KEYBOARD,
+			onKeyPressed:  this.movePads
+		}, this);
+        
+        return true;
 
         return true;
     }
