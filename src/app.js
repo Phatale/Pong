@@ -9,13 +9,12 @@ var HelloWorldLayer = cc.Layer.extend({
         var size = cc.winSize;
         var color = cc.color(100,100,100);
 
-        this.jugador1 =  new cc.DrawNode();
-        this.jugador1.drawRect(cc.p(0,0),cc.p(20,100),color,3);
+        // Creando los jugadores como sprites
+        this.jugador1 = new cc.Sprite(res.pad_png);
         this.jugador1.setPosition(size.width * 0.1,size.height / 2);
         this.addChild(this.jugador1, 1);
 
-        this.jugador2 =  new cc.DrawNode();
-        this.jugador2.drawRect(cc.p(0,0),cc.p(20,100),color,3);
+        this.jugador2 = new cc.Sprite(res.pad_png);
         this.jugador2.setPosition(size.width -(size.width * 0.1),size.height / 2);
         this.addChild(this.jugador2, 1);        
 
@@ -23,8 +22,7 @@ var HelloWorldLayer = cc.Layer.extend({
         lineaDivisoria.drawSegment(cc.p(size.width/2,0),cc.p(size.width/2,size.height),3,color);
         this.addChild(lineaDivisoria,0);
         
-        this.pelota =  new cc.DrawNode();
-        this.pelota.drawCircle(cc.p(0,0),5,0,100,false,10,color);
+        this.pelota = new cc.Sprite(res.ball_png);
         this.pelota.setPosition(size.width / 2,size.height / 2);
         this.addChild(this.pelota, 1);
 
