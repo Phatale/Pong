@@ -5,11 +5,19 @@ var HelloWorldLayer = cc.Layer.extend({
     pelota:null,    
     puntuacion1:null,
     puntuacion2:null,
+    score1:0,
+    score2:0,
+    Xmov:0,
+    Ymov:0,
+    speed:0,
     
     inicializar:function(){
         var size = cc.winSize;
         var color = cc.color(100,100,100);
 
+        this.Xmov = this.random(1,3);
+        this.Ymov = this.random(1,3);
+        this.speed = this.random(0.0001,0.001);
         // Creando los jugadores como sprites
         this.jugador1 = new cc.Sprite(res.pad_png);
         this.jugador1.setPosition(size.width * 0.1,size.height / 2);
@@ -62,11 +70,58 @@ var HelloWorldLayer = cc.Layer.extend({
          
         },
 
+    
+  random: function getRandomInt(min, max) {
+    	return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
+    
+        resetBall:function(){
+        var size = cc.winSize;
+        this.speed = this.random(0.0001,0.001);
+        this.pelota.setPosition(size.width / 2, this.random(0, size.height - 80));
+        this.Xmov = this.random(1,3);
+        this.Ymov = this.random(1,3);
+        this.puntuacion1.setString(this.score1);
+        this.puntuacion2.setString(this.score2);
+    },
+    
+        // Method to moves the ball
+    moverPelota: function(){
+        
+        var position = this.pelota.getPosition();
+        
+        if(position.y <= 20 || position.y >= cc.winSize.height - 40){
+            this.Ymov *= -1;
+            
+        } else if(position.x <= 0 ){
+            this.score2++;
+            this.resetBall();
+        } else if(position.x >= cc.winSize.width){
+            this.score1++;
+            this.resetBall();
+        } else if (cc.rectIntersectsRect(this.pelota.getBoundingBox(), this.jugador1.getBoundingBox())){
+            this.Xmov *= -1;
+        }
+        
+        else if(cc.rectIntersectsRect(this.pelota.getBoundingBox(), this.jugador2.getBoundingBox())){
+            this.Xmov *= -1;       
+        }
+        
+        var newX = this.pelota.getPosition().x + this.Xmov;
+        var newY = this.pelota.getPosition().y + this.Ymov;
+        
+        this.pelota.setPosition(newX, newY);
+
+    },
+    
+    
+    
     ctor:function () {
         this._super();
         this.inicializar();
 
-        
+                // Schedule Moveball
+        this.schedule(this.moverPelota, this.speed);
         
 
         cc.eventManager.addListener({
